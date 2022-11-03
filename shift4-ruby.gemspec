@@ -1,0 +1,34 @@
+# frozen_string_literal: true
+
+require_relative 'lib/shift4/version'
+
+Gem::Specification.new do |spec|
+  spec.name = "shift4"
+  spec.version = Shift4::VERSION
+  spec.authors = ["Shift4"]
+  spec.email = ["devsupport@shift4.com"]
+  spec.required_ruby_version = '>= 2.6'
+  spec.licenses = ['MIT']
+
+  spec.summary = "Shift4 Ruby Gem"
+  spec.description = "Ruby gem simplifying integration with Shift4 API"
+  spec.homepage = "https://shift4.com"
+
+  spec.files = Dir['lib/**/*.rb'] + Dir['bin/*']
+  spec.bindir = "exe"
+  spec.executables = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
+  spec.require_paths = ["lib"]
+
+  spec.add_dependency 'httparty', '~> 0.20'
+
+  spec.add_development_dependency 'bundler', '~> 2.2'
+  spec.add_development_dependency "dotenv", "~> 2.1"
+  spec.add_development_dependency "pry", "~> 0.14"
+  spec.add_development_dependency "rake", "~> 13.0"
+  spec.add_development_dependency "rspec", "~> 3.10"
+  spec.add_development_dependency "rubocop-performance", "~> 1.12"
+  spec.add_development_dependency 'rubocop-rake', '~> 0.5.1'
+  spec.add_development_dependency 'rubocop-rspec', '~> 2.6'
+  spec.add_development_dependency "simplecov", "~> 0.21"
+  spec.add_development_dependency "waitutil", "~> 0.2.1"
+end
