@@ -4,24 +4,24 @@ module Shift4
   class Subscriptions
     extend TransactionBase
 
-    def self.create(params)
-      communicator.post("#{Configuration.api_url}/subscriptions", json: params)
+    def self.create(params, config = Configuration)
+      communicator.post("#{config.api_url}/subscriptions", json: params, config: config)
     end
 
-    def self.retrieve(subscription_id)
-      communicator.get("#{Configuration.api_url}/subscriptions/#{subscription_id}")
+    def self.retrieve(subscription_id, config = Configuration)
+      communicator.get("#{config.api_url}/subscriptions/#{subscription_id}", config: config)
     end
 
-    def self.update(subscription_id, params)
-      communicator.post("#{Configuration.api_url}/subscriptions/#{subscription_id}", json: params)
+    def self.update(subscription_id, params, config = Configuration)
+      communicator.post("#{config.api_url}/subscriptions/#{subscription_id}", json: params, config: config)
     end
 
-    def self.cancel(subscription_id)
-      communicator.delete("#{Configuration.api_url}/subscriptions/#{subscription_id}")
+    def self.cancel(subscription_id, config = Configuration)
+      communicator.delete("#{config.api_url}/subscriptions/#{subscription_id}", config: config)
     end
 
-    def self.list(params = nil)
-      communicator.get("#{Configuration.api_url}/subscriptions", query: params)
+    def self.list(params = nil, config = Configuration)
+      communicator.get("#{config.api_url}/subscriptions", query: params, config: config)
     end
   end
 end

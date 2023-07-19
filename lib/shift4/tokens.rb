@@ -4,12 +4,12 @@ module Shift4
   class Tokens
     extend TransactionBase
 
-    def self.create(params)
-      communicator.post("#{Configuration.api_url}/tokens", json: params)
+    def self.create(params, config = Configuration)
+      communicator.post("#{config.api_url}/tokens", json: params, config: config)
     end
 
-    def self.retrieve(token_id)
-      communicator.get("#{Configuration.api_url}/tokens/#{token_id}")
+    def self.retrieve(token_id, config = Configuration)
+      communicator.get("#{config.api_url}/tokens/#{token_id}", config: config)
     end
   end
 end

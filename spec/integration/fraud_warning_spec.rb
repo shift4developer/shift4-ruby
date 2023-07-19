@@ -3,29 +3,29 @@
 require_relative '../spec_helper'
 
 describe Shift4::FraudWarnings do
-  include_context 'with test config'
+  each_context(*standard_contexts) do
+    it 'retrieve fraud_warning' do
+      # given
+      fraud_warning, charge = create_fraud_warning
 
-  it 'retrieve fraud_warning' do
-    # given
-    fraud_warning, charge = create_fraud_warning
+      # when
+      retrieved = Shift4::FraudWarnings.retrieve(fraud_warning['id'])
 
-    # when
-    retrieved = Shift4::FraudWarnings.retrieve(fraud_warning['id'])
+      # then
+      expect(retrieved['charge']).to eq(charge['id'])
+    end
 
-    # then
-    expect(retrieved['charge']).to eq(charge['id'])
-  end
+    it 'list fraud_warnings' do
+      # given
+      fraud_warning, = create_fraud_warning
 
-  it 'list fraud_warnings' do
-    # given
-    fraud_warning, = create_fraud_warning
+      # when
+      fraud_warnings = Shift4::FraudWarnings.list(limit: 100)
 
-    # when
-    fraud_warnings = Shift4::FraudWarnings.list(limit: 100)
-
-    # then
-    expect(fraud_warnings['list'].map { |it| it['id'] })
-      .to include(fraud_warning['id'])
+      # then
+      expect(fraud_warnings['list'].map { |it| it['id'] })
+        .to include(fraud_warning['id'])
+    end
   end
 end
 

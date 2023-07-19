@@ -10,29 +10,31 @@ module Shift4
 
     @web_consumer = HTTParty
 
-    def self.get(url, query: nil)
-      response = web_consumer.get(url, request(query: query))
+    def self.get(url, query: nil, config: Configuration)
+      response = web_consumer.get(url, request(query: query, config: config))
       handle_response(response)
       response
     end
 
-    def self.post(url, json: nil, body: nil)
-      response = web_consumer.post(url, request(json: json, body: body))
+    def self.post(url, json: nil, body: nil, config: Configuration)
+      response = web_consumer.post(url, request(json: json, body: body, config: config))
       handle_response(response)
       response
     end
 
-    def self.delete(url)
-      response = web_consumer.delete(url, request)
+    def self.delete(url, config: Configuration)
+      response = web_consumer.delete(url, request(config: config))
       handle_response(response)
       response
     end
 
-    def self.request(json: nil, query: nil, body: nil)
+    def self.request(json: nil, query: nil, body: nil, config: Configuration)
       headers = {
         "User-Agent" => "Shift4-Ruby/#{Shift4::VERSION} (Ruby/#{RUBY_VERSION})",
         "Accept" => "application/json",
       }
+      headers["Shift4-Merchant"] = config.merchant unless config.merchant.nil?
+
       if json
         raise ArgumentError("Cannot specify both body and json") if body
 
@@ -45,7 +47,7 @@ module Shift4
         query: query,
         headers: headers,
         basic_auth: {
-          username: Configuration.secret_key
+          username: config.secret_key
         }
       }
     end
