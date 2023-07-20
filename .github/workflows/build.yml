@@ -6,6 +6,8 @@ jobs:
   integration-tests:
     env:
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
+      EXPLICIT_MERCHANT_SECRET_KEY: ${{ secrets.EXPLICIT_MERCHANT_SECRET_KEY }}
+      EXPLICIT_MERCHANT: ${{ secrets.EXPLICIT_MERCHANT }}
     name: Integration Tests
     strategy:
       fail-fast: false

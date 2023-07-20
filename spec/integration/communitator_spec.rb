@@ -3,7 +3,7 @@
 require_relative '../spec_helper'
 
 describe Shift4::Communicator do
-  include_context 'with test config'
+  include_context 'with standard config'
 
   let(:url) { Shift4::Configuration.api_url }
 
