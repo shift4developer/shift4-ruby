@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class TestData # rubocop:disable Metrics/ClassLength
+class TestData
   def self.card
     {
       'number' => '4242424242424242',
