@@ -11,3 +11,4 @@
 /spec/integration.rb
 /*.iml
 /.env
+/out
