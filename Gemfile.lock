@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    shift4 (1.1.0)
+    shift4 (2.0.0)
       httparty (~> 0.20)
 
 GEM
