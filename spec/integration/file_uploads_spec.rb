@@ -25,6 +25,28 @@ describe Shift4::FileUploads do
       expect(uploaded['id']).not_to be_nil
     end
 
+    it 'test upload by file only once with idempotency_key' do
+      # given
+      tempfile = create_test_pdf
+      request_options = Shift4::RequestOptions.new(idempotency_key: random_idempotency_key.to_s)
+
+      # when
+      uploaded = Shift4::FileUploads.upload(
+        tempfile,
+        { purpose: 'dispute_evidence' },
+        request_options: request_options
+      )
+      not_uploaded_because_idempotency = Shift4::FileUploads.upload(
+        tempfile,
+        { purpose: 'dispute_evidence' },
+        request_options: request_options
+      )
+
+      # then
+      expect(uploaded['id']).to eq(not_uploaded_because_idempotency['id'])
+      expect(not_uploaded_because_idempotency.headers['Idempotent-Replayed']).to eq("true")
+    end
+
     it 'test get' do
       # given
       uploaded = Shift4::FileUploads.upload(create_test_pdf, { purpose: 'dispute_evidence' })

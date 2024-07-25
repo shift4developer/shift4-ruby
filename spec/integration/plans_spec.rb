@@ -20,6 +20,20 @@ describe Shift4::Plans do
       expect(retrieved['name']).to eq(plan_req['name'])
     end
 
+    it 'create only once with idempotency_key' do
+      # given
+      plan_req = TestData.plan
+      request_options = Shift4::RequestOptions.new(idempotency_key: random_idempotency_key.to_s)
+
+      # when
+      created = Shift4::Plans.create(plan_req, request_options: request_options)
+      not_created_because_idempotency = Shift4::Plans.create(plan_req, request_options: request_options)
+
+      # then
+      expect(created['id']).to eq(not_created_because_idempotency['id'])
+      expect(not_created_because_idempotency.headers['Idempotent-Replayed']).to eq("true")
+    end
+
     it 'update plan' do
       # given
       plan_req = TestData.plan
@@ -35,6 +49,25 @@ describe Shift4::Plans do
       expect(retrieved['amount']).to eq(222)
       expect(retrieved['currency']).to eq('PLN')
       expect(retrieved['name']).to eq('Updated plan')
+    end
+
+    it 'update plan once with idempotency_key' do
+      # given
+      plan_req = TestData.plan
+      created = Shift4::Plans.create(plan_req)
+
+      request_options = Shift4::RequestOptions.new(idempotency_key: random_idempotency_key.to_s)
+
+      # when
+      updated = Shift4::Plans.update(created['id'],
+                                     { amount: 222, currency: 'PLN', name: 'Updated plan' },
+                                     request_options: request_options)
+      not_updated_because_idempotency = Shift4::Plans.update(created['id'],
+                                                             { amount: 222, currency: 'PLN', name: 'Updated plan' },
+                                                             request_options: request_options)
+
+      # then
+      expect(not_updated_because_idempotency.headers['Idempotent-Replayed']).to eq("true")
     end
 
     it 'delete plan' do

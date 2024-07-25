@@ -4,8 +4,13 @@ module Shift4
   class PaymentMethods
     extend TransactionBase
 
-    def self.create(params, config = Configuration)
-      communicator.post("#{config.api_url}/payment-methods", json: params, config: config)
+    def self.create(params, config = Configuration, request_options: RequestOptions)
+      communicator.post(
+        "#{config.api_url}/payment-methods",
+        json: params,
+        config: config,
+        request_options: request_options
+      )
     end
 
     def self.retrieve(plan_id, config = Configuration)

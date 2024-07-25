@@ -4,16 +4,25 @@ module Shift4
   class Customers
     extend TransactionBase
 
-    def self.create(params, config = Configuration)
-      communicator.post("#{config.api_url}/customers", json: params, config: config)
+    def self.create(params, config = Configuration, request_options: RequestOptions)
+      communicator.post(
+        "#{config.api_url}/customers",
+        json: params, config: config,
+        request_options: request_options
+      )
     end
 
     def self.retrieve(customer_id, config = Configuration)
       communicator.get("#{config.api_url}/customers/#{customer_id}", config: config)
     end
 
-    def self.update(customer_id, params, config = Configuration)
-      communicator.post("#{config.api_url}/customers/#{customer_id}", json: params, config: config)
+    def self.update(customer_id, params, config = Configuration, request_options: RequestOptions)
+      communicator.post(
+        "#{config.api_url}/customers/#{customer_id}",
+        json: params,
+        config: config,
+        request_options: request_options
+      )
     end
 
     def self.delete(customer_id, config = Configuration)

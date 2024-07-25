@@ -21,6 +21,21 @@ describe Shift4::PaymentMethods do
       expect(retrieved['status']).to eq('chargeable')
     end
 
+    it 'create only once with idempotency_key' do
+      # given
+      payment_method_req = TestData.payment_method
+      request_options = Shift4::RequestOptions.new(idempotency_key: random_idempotency_key.to_s)
+
+      # when
+      created = Shift4::PaymentMethods.create(payment_method_req, request_options: request_options)
+      not_created_because_idempotency = Shift4::PaymentMethods.create(payment_method_req,
+                                                                      request_options: request_options)
+
+      # then
+      expect(created['id']).to eq(not_created_because_idempotency['id'])
+      expect(not_created_because_idempotency.headers['Idempotent-Replayed']).to eq("true")
+    end
+
     it 'delete payment_method' do
       # given
       payment_method_req = TestData.payment_method

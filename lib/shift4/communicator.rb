@@ -16,8 +16,11 @@ module Shift4
       response
     end
 
-    def self.post(url, json: nil, body: nil, config: Configuration)
-      response = web_consumer.post(url, request(json: json, body: body, config: config))
+    def self.post(url, json: nil, body: nil, config: Configuration, request_options: RequestOptions)
+      response = web_consumer.post(
+        url,
+        request(json: json, body: body, config: config, request_options: request_options)
+      )
       handle_response(response)
       response
     end
@@ -28,12 +31,13 @@ module Shift4
       response
     end
 
-    def self.request(json: nil, query: nil, body: nil, config: Configuration)
+    def self.request(json: nil, query: nil, body: nil, config: Configuration, request_options: RequestOptions)
       headers = {
         "User-Agent" => "Shift4-Ruby/#{Shift4::VERSION} (Ruby/#{RUBY_VERSION})",
         "Accept" => "application/json",
       }
       headers["Shift4-Merchant"] = config.merchant unless config.merchant.nil?
+      headers["Idempotency-Key"] = request_options.idempotency_key unless request_options.idempotency_key.nil?
 
       if json
         raise ArgumentError("Cannot specify both body and json") if body

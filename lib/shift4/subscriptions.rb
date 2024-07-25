@@ -4,16 +4,26 @@ module Shift4
   class Subscriptions
     extend TransactionBase
 
-    def self.create(params, config = Configuration)
-      communicator.post("#{config.api_url}/subscriptions", json: params, config: config)
+    def self.create(params, config = Configuration, request_options: RequestOptions)
+      communicator.post(
+        "#{config.api_url}/subscriptions",
+        json: params,
+        config: config,
+        request_options: request_options
+      )
     end
 
     def self.retrieve(subscription_id, config = Configuration)
       communicator.get("#{config.api_url}/subscriptions/#{subscription_id}", config: config)
     end
 
-    def self.update(subscription_id, params, config = Configuration)
-      communicator.post("#{config.api_url}/subscriptions/#{subscription_id}", json: params, config: config)
+    def self.update(subscription_id, params, config = Configuration, request_options: RequestOptions)
+      communicator.post(
+        "#{config.api_url}/subscriptions/#{subscription_id}",
+        json: params,
+        config: config,
+        request_options: request_options
+      )
     end
 
     def self.cancel(subscription_id, config = Configuration)

@@ -16,6 +16,28 @@ describe Shift4::Blacklist do
       expect(retrieved['email']).to eq(email)
     end
 
+    it 'create only one rule on blacklist with idempotency_key' do
+      # given
+      email = random_email
+      request = { ruleType: 'email', email: email, }
+
+      request_options = Shift4::RequestOptions.new(idempotency_key: random_idempotency_key.to_s)
+
+      # when
+      created = Shift4::Blacklist.create(
+        request,
+        request_options: request_options
+      )
+      not_created_because_idempotency = Shift4::Blacklist.create(
+        request,
+        request_options: request_options
+      )
+
+      # then
+      expect(created['id']).to eq(not_created_because_idempotency['id'])
+      expect(not_created_because_idempotency.headers['Idempotent-Replayed']).to eq("true")
+    end
+
     it 'delete blacklist' do
       # given
       email = random_email

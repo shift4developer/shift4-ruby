@@ -40,6 +40,25 @@ describe Shift4::Disputes do
       expect(retrieved['evidence']['customerName']).to eq(evidence_customer_name)
     end
 
+    it 'update dispute only once with idempotency_key' do
+      # given
+      dispute, = create_dispute
+      evidence_customer_name = 'Test Customer'
+
+      request_options = Shift4::RequestOptions.new(idempotency_key: random_idempotency_key.to_s)
+
+      # when
+      updated = Shift4::Disputes.update(dispute['id'],
+                                        { evidence: { customerName: evidence_customer_name } },
+                                        request_options: request_options)
+      not_updated_because_idempotency = Shift4::Disputes.update(dispute['id'],
+                                                                { evidence: { customerName: evidence_customer_name } },
+                                                                request_options: request_options)
+
+      # then
+      expect(not_updated_because_idempotency.headers['Idempotent-Replayed']).to eq("true")
+    end
+
     it 'close dispute' do
       # given
       dispute, = create_dispute
@@ -50,6 +69,22 @@ describe Shift4::Disputes do
 
       # then
       expect(retrieved['acceptedAsLost']).to eq(true)
+    end
+
+    it 'close dispute only once with idempotency_key' do
+      # given
+      dispute, = create_dispute
+
+      request_options = Shift4::RequestOptions.new(idempotency_key: random_idempotency_key.to_s)
+
+      # when
+      closed = Shift4::Disputes.close(dispute['id'],
+                                      request_options: request_options)
+      not_closed_because_idempotency = Shift4::Disputes.close(dispute['id'],
+                                                              request_options: request_options)
+
+      # then
+      expect(not_closed_because_idempotency.headers['Idempotent-Replayed']).to eq("true")
     end
   end
 end

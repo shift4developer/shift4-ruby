@@ -19,6 +19,20 @@ describe Shift4::Credits do
       expect(retrieved['card']['first4']).to eq(credit_req["card"]["first4"])
     end
 
+    it 'create only once with idempotency_key' do
+      # given
+      credit_req = TestData.credit(card: TestData.card)
+      request_options = Shift4::RequestOptions.new(idempotency_key: random_idempotency_key.to_s)
+
+      # when
+      created = Shift4::Credits.create(credit_req, request_options: request_options)
+      not_created_because_idempotency = Shift4::Credits.create(credit_req, request_options: request_options)
+
+      # then
+      expect(created['id']).to eq(not_created_because_idempotency['id'])
+      expect(not_created_because_idempotency.headers['Idempotent-Replayed']).to eq("true")
+    end
+
     it 'update credit' do
       # given
       card = TestData.card
@@ -40,6 +54,28 @@ describe Shift4::Credits do
       expect(updated['amount']).to eq(credit_req["amount"])
       expect(updated['currency']).to eq(credit_req["currency"])
       expect(updated['card']['first4']).to eq(credit_req["card"]["first4"])
+    end
+
+    it 'update credit only once with idempotency_key' do
+      # given
+      card = TestData.card
+      credit_req = TestData.credit(card: card)
+      created = Shift4::Credits.create(credit_req)
+
+      request_options = Shift4::RequestOptions.new(idempotency_key: random_idempotency_key.to_s)
+
+      # when
+      updated = Shift4::Credits.update(created['id'],
+                                       "description" => "updated description",
+                                       "metadata" => { "key" => "updated value" },
+                                       request_options: request_options)
+      not_updated_because_idempotency = Shift4::Credits.update(created['id'],
+                                                               "description" => "updated description",
+                                                               "metadata" => { "key" => "updated value" },
+                                                               request_options: request_options)
+
+      # then
+      expect(not_updated_because_idempotency.headers['Idempotent-Replayed']).to eq("true")
     end
 
     it 'list credits' do

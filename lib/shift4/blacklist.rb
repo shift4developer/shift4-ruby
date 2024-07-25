@@ -5,8 +5,8 @@ module Shift4
   class Blacklist
     extend TransactionBase
 
-    def self.create(params, config = Configuration)
-      communicator.post("#{config.api_url}/blacklist", json: params, config: config)
+    def self.create(params, config = Configuration, request_options: RequestOptions)
+      communicator.post("#{config.api_url}/blacklist", json: params, config: config, request_options: request_options)
     end
 
     def self.retrieve(blacklist_rule_id, config = Configuration)

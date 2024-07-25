@@ -39,13 +39,27 @@ describe Shift4::Charges do
       expect(retrieved['card']['first4']).to eq(charge_req["card"]["first4"])
     end
 
+    it 'create charge only once with idempotency_key' do
+      # given
+      charge_req = TestData.charge(card: TestData.card)
+      request_options = Shift4::RequestOptions.new(idempotency_key: random_idempotency_key.to_s)
+
+      # when
+      created = Shift4::Charges.create(charge_req, request_options: request_options)
+      not_created_because_idempotency = Shift4::Charges.create(charge_req, request_options: request_options)
+
+      # then
+      expect(created['id']).to eq(not_created_because_idempotency['id'])
+      expect(not_created_because_idempotency.headers['Idempotent-Replayed']).to eq("true")
+    end
+
     it 'update charge' do
       # given
       card = TestData.card
       charge_req = TestData.charge(card: card)
+      created = Shift4::Charges.create(charge_req)
 
       # when
-      created = Shift4::Charges.create(charge_req)
       updated = Shift4::Charges.update(created['id'],
                                        "description" => "updated description",
                                        "metadata" => { "key" => "updated value" })
@@ -62,6 +76,29 @@ describe Shift4::Charges do
       expect(updated['card']['first4']).to eq(charge_req["card"]["first4"])
     end
 
+    it 'update charge only once with idempotency_key' do
+      # given
+      card = TestData.card
+      charge_req = TestData.charge(card: card)
+      created = Shift4::Charges.create(charge_req)
+
+      request_options = Shift4::RequestOptions.new(idempotency_key: random_idempotency_key.to_s)
+
+      # when
+      updated = Shift4::Charges.update(created['id'],
+                                       "description" => "updated description",
+                                       "metadata" => { "key" => "updated value" },
+                                       request_options: request_options)
+
+      not_updated_because_idempotency = Shift4::Charges.update(created['id'],
+                                                               "description" => "updated description",
+                                                               "metadata" => { "key" => "updated value" },
+                                                               request_options: request_options)
+
+      # then
+      expect(not_updated_because_idempotency.headers['Idempotent-Replayed']).to eq("true")
+    end
+
     it 'capture charge' do
       # given
       charge_req = TestData.charge(card: TestData.card, captured: false)
@@ -75,6 +112,22 @@ describe Shift4::Charges do
       expect(captured['captured']).to eq(true)
     end
 
+    it 'capture charge only once with idempotency_key' do
+      # given
+      charge_req = TestData.charge(card: TestData.card, captured: false)
+      created = Shift4::Charges.create(charge_req)
+
+      request_options = Shift4::RequestOptions.new(idempotency_key: random_idempotency_key.to_s)
+
+      # when
+      captured = Shift4::Charges.capture(created['id'], request_options: request_options)
+      not_captured_because_idempotency = Shift4::Charges.capture(created['id'], request_options: request_options)
+
+      # then
+      expect(captured['id']).to eq(not_captured_because_idempotency['id'])
+      expect(not_captured_because_idempotency.headers['Idempotent-Replayed']).to eq("true")
+    end
+
     it 'refund charge' do
       # given
       charge_req = TestData.charge(card: TestData.card, captured: false)
@@ -86,6 +139,22 @@ describe Shift4::Charges do
       # then
       expect(created['refunded']).to eq(false)
       expect(refunded['refunded']).to eq(true)
+    end
+
+    it 'refund charge only once with idempotency_key' do
+      # given
+      charge_req = TestData.charge(card: TestData.card, captured: false)
+      created = Shift4::Charges.create(charge_req)
+
+      request_options = Shift4::RequestOptions.new(idempotency_key: random_idempotency_key.to_s)
+
+      # when
+      refunded = Shift4::Charges.refund(created['id'], request_options: request_options)
+      not_refunded_because_idempotency = Shift4::Charges.refund(created['id'], request_options: request_options)
+
+      # then
+      expect(refunded['id']).to eq(not_refunded_because_idempotency['id'])
+      expect(not_refunded_because_idempotency.headers['Idempotent-Replayed']).to eq("true")
     end
 
     it 'list charges' do
