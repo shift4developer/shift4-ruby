@@ -86,13 +86,17 @@ describe Shift4::Charges do
 
       # when
       updated = Shift4::Charges.update(created['id'],
-                                       "description" => "updated description",
-                                       "metadata" => { "key" => "updated value" },
+                                       {
+                                         "description" => "updated description",
+                                         "metadata" => { "key" => "updated value" }
+                                       },
                                        request_options: request_options)
 
       not_updated_because_idempotency = Shift4::Charges.update(created['id'],
-                                                               "description" => "updated description",
-                                                               "metadata" => { "key" => "updated value" },
+                                                               {
+                                                                 "description" => "updated description",
+                                                                 "metadata" => { "key" => "updated value" }
+                                                               },
                                                                request_options: request_options)
 
       # then

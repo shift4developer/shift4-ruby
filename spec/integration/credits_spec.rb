@@ -66,12 +66,16 @@ describe Shift4::Credits do
 
       # when
       updated = Shift4::Credits.update(created['id'],
-                                       "description" => "updated description",
-                                       "metadata" => { "key" => "updated value" },
+                                       {
+                                         "description" => "updated description",
+                                         "metadata" => { "key" => "updated value" }
+                                       },
                                        request_options: request_options)
       not_updated_because_idempotency = Shift4::Credits.update(created['id'],
-                                                               "description" => "updated description",
-                                                               "metadata" => { "key" => "updated value" },
+                                                               {
+                                                                 "description" => "updated description",
+                                                                 "metadata" => { "key" => "updated value" }
+                                                               },
                                                                request_options: request_options)
 
       # then

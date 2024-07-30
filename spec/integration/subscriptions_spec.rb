@@ -26,11 +26,15 @@ describe Shift4::Subscriptions do
       request_options = Shift4::RequestOptions.new(idempotency_key: random_idempotency_key.to_s)
 
       # when
-      subscription = Shift4::Subscriptions.create(customerId: customer['id'],
-                                                  planId: plan['id'],
+      subscription = Shift4::Subscriptions.create({
+                                                    customerId: customer['id'],
+                                                    planId: plan['id']
+                                                  },
                                                   request_options: request_options)
-      not_subscribed_because_idempotency = Shift4::Subscriptions.create(customerId: customer['id'],
-                                                                        planId: plan['id'],
+      not_subscribed_because_idempotency = Shift4::Subscriptions.create({
+                                                                          customerId: customer['id'],
+                                                                          planId: plan['id']
+                                                                        },
                                                                         request_options: request_options)
 
       # then
@@ -83,29 +87,33 @@ describe Shift4::Subscriptions do
 
       # when
       updated = Shift4::Subscriptions.update(subscription['id'],
-                                             shipping: {
-                                               name: 'Updated shipping',
-                                               address: {
-                                                 "line1" => "Updated line1",
-                                                 "line2" => "Updated line2",
-                                                 "zip" => "Updated zip",
-                                                 "city" => "Updated city",
-                                                 "state" => "Updated state",
-                                                 "country" => "CH",
-                                               }.compact,
+                                             {
+                                               shipping: {
+                                                 name: 'Updated shipping',
+                                                 address: {
+                                                   "line1" => "Updated line1",
+                                                   "line2" => "Updated line2",
+                                                   "zip" => "Updated zip",
+                                                   "city" => "Updated city",
+                                                   "state" => "Updated state",
+                                                   "country" => "CH",
+                                                 }.compact,
+                                               }
                                              },
                                              request_options: request_options)
       not_updated_because_idempotency = Shift4::Subscriptions.update(subscription['id'],
-                                                                     shipping: {
-                                                                       name: 'Updated shipping',
-                                                                       address: {
-                                                                         "line1" => "Updated line1",
-                                                                         "line2" => "Updated line2",
-                                                                         "zip" => "Updated zip",
-                                                                         "city" => "Updated city",
-                                                                         "state" => "Updated state",
-                                                                         "country" => "CH",
-                                                                       }.compact,
+                                                                     {
+                                                                       shipping: {
+                                                                         name: 'Updated shipping',
+                                                                         address: {
+                                                                           "line1" => "Updated line1",
+                                                                           "line2" => "Updated line2",
+                                                                           "zip" => "Updated zip",
+                                                                           "city" => "Updated city",
+                                                                           "state" => "Updated state",
+                                                                           "country" => "CH",
+                                                                         }.compact,
+                                                                       }
                                                                      },
                                                                      request_options: request_options)
 
