@@ -6,8 +6,8 @@ module Shift4
       attr_reader :idempotency_key
     end
 
-    def initialize(params = {})
-      @idempotency_key = params.fetch(:idempotency_key, nil)
+    def initialize(idempotency_key: nil)
+      @idempotency_key = idempotency_key
     end
 
     attr_reader :idempotency_key
