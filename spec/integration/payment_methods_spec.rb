@@ -27,9 +27,9 @@ describe Shift4::PaymentMethods do
       request_options = Shift4::RequestOptions.new(idempotency_key: random_idempotency_key.to_s)
 
       # when
-      created = Shift4::PaymentMethods.create(payment_method_req, request_options: request_options)
+      created = Shift4::PaymentMethods.create(payment_method_req, request_options)
       not_created_because_idempotency = Shift4::PaymentMethods.create(payment_method_req,
-                                                                      request_options: request_options)
+                                                                      request_options)
 
       # then
       expect(created['id']).to eq(not_created_because_idempotency['id'])

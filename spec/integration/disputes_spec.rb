@@ -50,10 +50,10 @@ describe Shift4::Disputes do
       # when
       updated = Shift4::Disputes.update(dispute['id'],
                                         { evidence: { customerName: evidence_customer_name } },
-                                        request_options: request_options)
+                                        request_options)
       not_updated_because_idempotency = Shift4::Disputes.update(dispute['id'],
                                                                 { evidence: { customerName: evidence_customer_name } },
-                                                                request_options: request_options)
+                                                                request_options)
 
       # then
       expect(not_updated_because_idempotency.headers['Idempotent-Replayed']).to eq("true")
@@ -79,9 +79,9 @@ describe Shift4::Disputes do
 
       # when
       closed = Shift4::Disputes.close(dispute['id'],
-                                      request_options: request_options)
+                                      request_options)
       not_closed_because_idempotency = Shift4::Disputes.close(dispute['id'],
-                                                              request_options: request_options)
+                                                              request_options)
 
       # then
       expect(not_closed_because_idempotency.headers['Idempotent-Replayed']).to eq("true")

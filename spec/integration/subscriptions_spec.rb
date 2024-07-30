@@ -30,12 +30,12 @@ describe Shift4::Subscriptions do
                                                     customerId: customer['id'],
                                                     planId: plan['id']
                                                   },
-                                                  request_options: request_options)
+                                                  request_options)
       not_subscribed_because_idempotency = Shift4::Subscriptions.create({
                                                                           customerId: customer['id'],
                                                                           planId: plan['id']
                                                                         },
-                                                                        request_options: request_options)
+                                                                        request_options)
 
       # then
       expect(subscription['id']).to eq(not_subscribed_because_idempotency['id'])
@@ -100,7 +100,7 @@ describe Shift4::Subscriptions do
                                                  }.compact,
                                                }
                                              },
-                                             request_options: request_options)
+                                             request_options)
       not_updated_because_idempotency = Shift4::Subscriptions.update(subscription['id'],
                                                                      {
                                                                        shipping: {
@@ -115,7 +115,7 @@ describe Shift4::Subscriptions do
                                                                          }.compact,
                                                                        }
                                                                      },
-                                                                     request_options: request_options)
+                                                                     request_options)
 
       # then
       expect(not_updated_because_idempotency.headers['Idempotent-Replayed']).to eq("true")

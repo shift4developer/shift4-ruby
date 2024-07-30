@@ -4,12 +4,11 @@ module Shift4
   class Cards
     extend TransactionBase
 
-    def self.create(customer_id, params, config = Configuration, request_options: RequestOptions)
+    def self.create(customer_id, params, config = Configuration)
       communicator.post(
         "#{config.api_url}/customers/#{customer_id}/cards",
         json: params,
-        config: config,
-        request_options: request_options
+        config: config
       )
     end
 
@@ -17,12 +16,11 @@ module Shift4
       communicator.get("#{config.api_url}/customers/#{customer_id}/cards/#{card_id}", config: config)
     end
 
-    def self.update(customer_id, card_id, params, config = Configuration, request_options: RequestOptions)
+    def self.update(customer_id, card_id, params, config = Configuration)
       communicator.post(
         "#{config.api_url}/customers/#{customer_id}/cards/#{card_id}",
         json: params,
-        config: config,
-        request_options: request_options
+        config: config
       )
     end
 

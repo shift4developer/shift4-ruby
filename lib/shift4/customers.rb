@@ -4,11 +4,10 @@ module Shift4
   class Customers
     extend TransactionBase
 
-    def self.create(params, config = Configuration, request_options: RequestOptions)
+    def self.create(params, config = Configuration)
       communicator.post(
         "#{config.api_url}/customers",
-        json: params, config: config,
-        request_options: request_options
+        json: params, config: config
       )
     end
 
@@ -16,12 +15,11 @@ module Shift4
       communicator.get("#{config.api_url}/customers/#{customer_id}", config: config)
     end
 
-    def self.update(customer_id, params, config = Configuration, request_options: RequestOptions)
+    def self.update(customer_id, params, config = Configuration)
       communicator.post(
         "#{config.api_url}/customers/#{customer_id}",
         json: params,
-        config: config,
-        request_options: request_options
+        config: config
       )
     end
 

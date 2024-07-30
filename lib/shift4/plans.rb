@@ -4,20 +4,19 @@ module Shift4
   class Plans
     extend TransactionBase
 
-    def self.create(params, config = Configuration, request_options: RequestOptions)
-      communicator.post("#{config.api_url}/plans", json: params, config: config, request_options: request_options)
+    def self.create(params, config = Configuration)
+      communicator.post("#{config.api_url}/plans", json: params, config: config, )
     end
 
     def self.retrieve(plan_id, config = Configuration)
       communicator.get("#{config.api_url}/plans/#{plan_id}", config: config)
     end
 
-    def self.update(plan_id, params, config = Configuration, request_options: RequestOptions)
+    def self.update(plan_id, params, config = Configuration)
       communicator.post(
         "#{config.api_url}/plans/#{plan_id}",
         json: params,
-        config: config,
-        request_options: request_options
+        config: config
       )
     end
 

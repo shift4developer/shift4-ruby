@@ -23,8 +23,8 @@ describe Shift4::Customers do
       request_options = Shift4::RequestOptions.new(idempotency_key: random_idempotency_key.to_s)
 
       # when
-      created = Shift4::Customers.create(customer_req, request_options: request_options)
-      not_created_because_idempotency = Shift4::Customers.create(customer_req, request_options: request_options)
+      created = Shift4::Customers.create(customer_req, request_options)
+      not_created_because_idempotency = Shift4::Customers.create(customer_req, request_options)
 
       # then
       expect(created['id']).to eq(not_created_because_idempotency['id'])
@@ -57,10 +57,10 @@ describe Shift4::Customers do
       # when
       updated = Shift4::Customers.update(customer['id'],
                                          { defaultCardId: new_card['id'] },
-                                         request_options: request_options)
+                                         request_options)
       not_updated_because_idempotency = Shift4::Customers.update(customer['id'],
                                                                  { defaultCardId: new_card['id'] },
-                                                                 request_options: request_options)
+                                                                 request_options)
 
       # then
       expect(not_updated_because_idempotency.headers['Idempotent-Replayed']).to eq("true")

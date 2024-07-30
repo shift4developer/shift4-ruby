@@ -23,14 +23,15 @@ describe Shift4::Blacklist do
 
       request_options = Shift4::RequestOptions.new(idempotency_key: random_idempotency_key.to_s)
 
-      # when
       created = Shift4::Blacklist.create(
         request,
-        request_options: request_options
+        request_options
       )
+
+      # when
       not_created_because_idempotency = Shift4::Blacklist.create(
         request,
-        request_options: request_options
+        request_options
       )
 
       # then

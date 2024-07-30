@@ -42,7 +42,7 @@ describe Shift4::Cards do
                                        cvc: '123',
                                        cardholderName: cardholder_name
                                      },
-                                     request_options: request_options)
+                                     request_options)
 
       # when
       not_created_because_idempotency = Shift4::Cards.create(customer_id,
@@ -53,7 +53,7 @@ describe Shift4::Cards do
                                                                cvc: '123',
                                                                cardholderName: cardholder_name
                                                              },
-                                                             request_options: request_options)
+                                                             request_options)
 
       # then
       expect(created['id']).to eq(not_created_because_idempotency['id'])
@@ -110,7 +110,7 @@ describe Shift4::Cards do
                                             addressLine1: 'updated addressLine1',
                                             addressLine2: 'updated addressLine2'
                                           },
-                                          request_options: request_options)
+                                          request_options)
       not_updated_because_idempotency = Shift4::Cards.update(customer['id'],
                                                              card['id'],
                                                              {
@@ -124,7 +124,7 @@ describe Shift4::Cards do
                                                                addressLine1: 'updated addressLine1',
                                                                addressLine2: 'updated addressLine2'
                                                              },
-                                                             request_options: request_options)
+                                                             request_options)
 
       # then
       expect(not_updated_because_idempotency.headers['Idempotent-Replayed']).to eq("true")

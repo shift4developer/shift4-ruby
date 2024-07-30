@@ -25,8 +25,8 @@ describe Shift4::Credits do
       request_options = Shift4::RequestOptions.new(idempotency_key: random_idempotency_key.to_s)
 
       # when
-      created = Shift4::Credits.create(credit_req, request_options: request_options)
-      not_created_because_idempotency = Shift4::Credits.create(credit_req, request_options: request_options)
+      created = Shift4::Credits.create(credit_req, request_options)
+      not_created_because_idempotency = Shift4::Credits.create(credit_req, request_options)
 
       # then
       expect(created['id']).to eq(not_created_because_idempotency['id'])
@@ -70,13 +70,13 @@ describe Shift4::Credits do
                                          "description" => "updated description",
                                          "metadata" => { "key" => "updated value" }
                                        },
-                                       request_options: request_options)
+                                       request_options)
       not_updated_because_idempotency = Shift4::Credits.update(created['id'],
                                                                {
                                                                  "description" => "updated description",
                                                                  "metadata" => { "key" => "updated value" }
                                                                },
-                                                               request_options: request_options)
+                                                               request_options)
 
       # then
       expect(not_updated_because_idempotency.headers['Idempotent-Replayed']).to eq("true")
