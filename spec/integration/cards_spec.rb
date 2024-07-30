@@ -97,20 +97,20 @@ describe Shift4::Cards do
       request_options = Shift4::RequestOptions.new(idempotency_key: random_idempotency_key.to_s)
 
       # when
-      updated_card = Shift4::Cards.update(customer['id'],
-                                          card['id'],
-                                          {
-                                            expMonth: '05',
-                                            expYear: '55',
-                                            cardholderName: 'updated cardholderName',
-                                            addressCountry: 'updated addressCountry',
-                                            addressCity: 'updated addressCity',
-                                            addressState: 'updated addressState',
-                                            addressZip: 'updated addressZip',
-                                            addressLine1: 'updated addressLine1',
-                                            addressLine2: 'updated addressLine2'
-                                          },
-                                          request_options)
+      Shift4::Cards.update(customer['id'],
+                           card['id'],
+                           {
+                             expMonth: '05',
+                             expYear: '55',
+                             cardholderName: 'updated cardholderName',
+                             addressCountry: 'updated addressCountry',
+                             addressCity: 'updated addressCity',
+                             addressState: 'updated addressState',
+                             addressZip: 'updated addressZip',
+                             addressLine1: 'updated addressLine1',
+                             addressLine2: 'updated addressLine2'
+                           },
+                           request_options)
       not_updated_because_idempotency = Shift4::Cards.update(customer['id'],
                                                              card['id'],
                                                              {

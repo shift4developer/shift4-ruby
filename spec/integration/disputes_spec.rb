@@ -48,9 +48,9 @@ describe Shift4::Disputes do
       request_options = Shift4::RequestOptions.new(idempotency_key: random_idempotency_key.to_s)
 
       # when
-      updated = Shift4::Disputes.update(dispute['id'],
-                                        { evidence: { customerName: evidence_customer_name } },
-                                        request_options)
+      Shift4::Disputes.update(dispute['id'],
+                              { evidence: { customerName: evidence_customer_name } },
+                              request_options)
       not_updated_because_idempotency = Shift4::Disputes.update(dispute['id'],
                                                                 { evidence: { customerName: evidence_customer_name } },
                                                                 request_options)
@@ -78,8 +78,8 @@ describe Shift4::Disputes do
       request_options = Shift4::RequestOptions.new(idempotency_key: random_idempotency_key.to_s)
 
       # when
-      closed = Shift4::Disputes.close(dispute['id'],
-                                      request_options)
+      Shift4::Disputes.close(dispute['id'],
+                             request_options)
       not_closed_because_idempotency = Shift4::Disputes.close(dispute['id'],
                                                               request_options)
 

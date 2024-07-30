@@ -55,9 +55,9 @@ describe Shift4::Customers do
       request_options = Shift4::RequestOptions.new(idempotency_key: random_idempotency_key.to_s)
 
       # when
-      updated = Shift4::Customers.update(customer['id'],
-                                         { defaultCardId: new_card['id'] },
-                                         request_options)
+      Shift4::Customers.update(customer['id'],
+                               { defaultCardId: new_card['id'] },
+                               request_options)
       not_updated_because_idempotency = Shift4::Customers.update(customer['id'],
                                                                  { defaultCardId: new_card['id'] },
                                                                  request_options)

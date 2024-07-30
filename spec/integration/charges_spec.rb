@@ -85,12 +85,12 @@ describe Shift4::Charges do
       request_options = Shift4::RequestOptions.new(idempotency_key: random_idempotency_key.to_s)
 
       # when
-      updated = Shift4::Charges.update(created['id'],
-                                       {
-                                         "description" => "updated description",
-                                         "metadata" => { "key" => "updated value" }
-                                       },
-                                       request_options)
+      Shift4::Charges.update(created['id'],
+                             {
+                               "description" => "updated description",
+                               "metadata" => { "key" => "updated value" }
+                             },
+                             request_options)
 
       not_updated_because_idempotency = Shift4::Charges.update(created['id'],
                                                                {

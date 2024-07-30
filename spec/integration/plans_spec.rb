@@ -59,9 +59,9 @@ describe Shift4::Plans do
       request_options = Shift4::RequestOptions.new(idempotency_key: random_idempotency_key.to_s)
 
       # when
-      updated = Shift4::Plans.update(created['id'],
-                                     { amount: 222, currency: 'PLN', name: 'Updated plan' },
-                                     request_options)
+      Shift4::Plans.update(created['id'],
+                           { amount: 222, currency: 'PLN', name: 'Updated plan' },
+                           request_options)
       not_updated_because_idempotency = Shift4::Plans.update(created['id'],
                                                              { amount: 222, currency: 'PLN', name: 'Updated plan' },
                                                              request_options)
