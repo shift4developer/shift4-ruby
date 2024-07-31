@@ -17,10 +17,7 @@ module Shift4
     end
 
     def self.post(url, json: nil, body: nil, config: Configuration)
-      response = web_consumer.post(
-        url,
-        request(json: json, body: body, config: config)
-      )
+      response = web_consumer.post(url, request(json: json, body: body, config: config))
       handle_response(response)
       response
     end

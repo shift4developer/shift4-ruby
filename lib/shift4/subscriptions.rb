@@ -5,11 +5,7 @@ module Shift4
     extend TransactionBase
 
     def self.create(params, config = Configuration)
-      communicator.post(
-        "#{config.api_url}/subscriptions",
-        json: params,
-        config: config
-      )
+      communicator.post("#{config.api_url}/subscriptions", json: params, config: config)
     end
 
     def self.retrieve(subscription_id, config = Configuration)
@@ -17,11 +13,7 @@ module Shift4
     end
 
     def self.update(subscription_id, params, config = Configuration)
-      communicator.post(
-        "#{config.api_url}/subscriptions/#{subscription_id}",
-        json: params,
-        config: config
-      )
+      communicator.post("#{config.api_url}/subscriptions/#{subscription_id}", json: params, config: config)
     end
 
     def self.cancel(subscription_id, config = Configuration)

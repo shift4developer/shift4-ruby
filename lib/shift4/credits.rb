@@ -13,11 +13,7 @@ module Shift4
     end
 
     def self.update(credit_id, params, config = Configuration)
-      communicator.post(
-        "#{config.api_url}/credits/#{credit_id}",
-        json: params,
-        config: config
-      )
+      communicator.post("#{config.api_url}/credits/#{credit_id}", json: params, config: config)
     end
 
     def self.list(params = nil, config = Configuration)

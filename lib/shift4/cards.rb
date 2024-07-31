@@ -5,11 +5,7 @@ module Shift4
     extend TransactionBase
 
     def self.create(customer_id, params, config = Configuration)
-      communicator.post(
-        "#{config.api_url}/customers/#{customer_id}/cards",
-        json: params,
-        config: config
-      )
+      communicator.post("#{config.api_url}/customers/#{customer_id}/cards", json: params, config: config)
     end
 
     def self.retrieve(customer_id, card_id, config = Configuration)
@@ -17,11 +13,7 @@ module Shift4
     end
 
     def self.update(customer_id, card_id, params, config = Configuration)
-      communicator.post(
-        "#{config.api_url}/customers/#{customer_id}/cards/#{card_id}",
-        json: params,
-        config: config
-      )
+      communicator.post("#{config.api_url}/customers/#{customer_id}/cards/#{card_id}", json: params, config: config)
     end
 
     def self.delete(customer_id, card_id, config = Configuration)
