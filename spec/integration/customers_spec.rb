@@ -17,6 +17,20 @@ describe Shift4::Customers do
       expect(retrieved['email']).to eq(customer_req['email'])
     end
 
+    it 'create only once with idempotency_key' do
+      # given
+      customer_req = TestData.customer
+      request_options = Shift4::RequestOptions.new(idempotency_key: random_idempotency_key.to_s)
+
+      # when
+      created = Shift4::Customers.create(customer_req, request_options)
+      not_created_because_idempotency = Shift4::Customers.create(customer_req, request_options)
+
+      # then
+      expect(created['id']).to eq(not_created_because_idempotency['id'])
+      expect(not_created_because_idempotency.headers['Idempotent-Replayed']).to eq("true")
+    end
+
     it 'update customer default card' do
       # given
       customer_req = TestData.customer(card: TestData.card)
@@ -30,6 +44,26 @@ describe Shift4::Customers do
       # then
       expect(updated['id']).not_to be_nil
       expect(updated['defaultCardId']).to eq(new_card['id'])
+    end
+
+    it 'update customer only once with idempotency_key' do
+      # given
+      customer_req = TestData.customer(card: TestData.card)
+      customer = Shift4::Customers.create(customer_req)
+      new_card = Shift4::Cards.create(customer['id'], TestData.card)
+
+      request_options = Shift4::RequestOptions.new(idempotency_key: random_idempotency_key.to_s)
+
+      # when
+      Shift4::Customers.update(customer['id'],
+                               { defaultCardId: new_card['id'] },
+                               request_options)
+      not_updated_because_idempotency = Shift4::Customers.update(customer['id'],
+                                                                 { defaultCardId: new_card['id'] },
+                                                                 request_options)
+
+      # then
+      expect(not_updated_because_idempotency.headers['Idempotent-Replayed']).to eq("true")
     end
 
     it 'delete customer' do

@@ -19,6 +19,29 @@ describe Shift4::Subscriptions do
       expect(retrieved['customerId']).to eq(customer['id'])
     end
 
+    it 'create only once with idempotency_key' do
+      # given
+      plan = Shift4::Plans.create(TestData.plan)
+      customer = Shift4::Customers.create(TestData.customer(card: TestData.card))
+      request_options = Shift4::RequestOptions.new(idempotency_key: random_idempotency_key.to_s)
+
+      # when
+      subscription = Shift4::Subscriptions.create({
+                                                    customerId: customer['id'],
+                                                    planId: plan['id']
+                                                  },
+                                                  request_options)
+      not_subscribed_because_idempotency = Shift4::Subscriptions.create({
+                                                                          customerId: customer['id'],
+                                                                          planId: plan['id']
+                                                                        },
+                                                                        request_options)
+
+      # then
+      expect(subscription['id']).to eq(not_subscribed_because_idempotency['id'])
+      expect(not_subscribed_because_idempotency.headers['Idempotent-Replayed']).to eq("true")
+    end
+
     it 'update subscription' do
       # given
       plan = Shift4::Plans.create(TestData.plan)
@@ -52,6 +75,50 @@ describe Shift4::Subscriptions do
       expect(shipping['address']['city']).to eq("Updated city")
       expect(shipping['address']['state']).to eq("Updated state")
       expect(shipping['address']['country']).to eq("CH")
+    end
+
+    it 'update subscription only once with idempotency_key' do
+      # given
+      plan = Shift4::Plans.create(TestData.plan)
+      customer = Shift4::Customers.create(TestData.customer(card: TestData.card))
+      subscription = Shift4::Subscriptions.create(customerId: customer['id'], planId: plan['id'])
+
+      request_options = Shift4::RequestOptions.new(idempotency_key: random_idempotency_key.to_s)
+
+      # when
+      Shift4::Subscriptions.update(subscription['id'],
+                                   {
+                                     shipping: {
+                                       name: 'Updated shipping',
+                                       address: {
+                                         "line1" => "Updated line1",
+                                         "line2" => "Updated line2",
+                                         "zip" => "Updated zip",
+                                         "city" => "Updated city",
+                                         "state" => "Updated state",
+                                         "country" => "CH",
+                                       }.compact,
+                                     }
+                                   },
+                                   request_options)
+      not_updated_because_idempotency = Shift4::Subscriptions.update(subscription['id'],
+                                                                     {
+                                                                       shipping: {
+                                                                         name: 'Updated shipping',
+                                                                         address: {
+                                                                           "line1" => "Updated line1",
+                                                                           "line2" => "Updated line2",
+                                                                           "zip" => "Updated zip",
+                                                                           "city" => "Updated city",
+                                                                           "state" => "Updated state",
+                                                                           "country" => "CH",
+                                                                         }.compact,
+                                                                       }
+                                                                     },
+                                                                     request_options)
+
+      # then
+      expect(not_updated_because_idempotency.headers['Idempotent-Replayed']).to eq("true")
     end
 
     it 'cancel subscription' do

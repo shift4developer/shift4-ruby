@@ -34,6 +34,9 @@ module Shift4
         "Accept" => "application/json",
       }
       headers["Shift4-Merchant"] = config.merchant unless config.merchant.nil?
+      if config.is_a?(RequestOptions) && !config.idempotency_key.nil?
+        headers["Idempotency-Key"] = config.idempotency_key
+      end
 
       if json
         raise ArgumentError("Cannot specify both body and json") if body

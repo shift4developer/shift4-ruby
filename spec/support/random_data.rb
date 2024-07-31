@@ -7,3 +7,7 @@ end
 def random_email
   "#{random_string}@#{random_string}.com"
 end
+
+def random_idempotency_key
+  "#{random_string}#{random_string}"
+end

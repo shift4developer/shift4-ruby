@@ -17,6 +17,7 @@ require 'shift4/file_uploads'
 require 'shift4/fraud_warnings'
 require 'shift4/payment_methods'
 require 'shift4/plans'
+require 'shift4/request_options'
 require 'shift4/subscriptions'
 require 'shift4/tokens'
 
