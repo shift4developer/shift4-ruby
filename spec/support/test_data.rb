@@ -47,6 +47,24 @@ class TestData
     }.compact
   end
 
+  def self.charge_with_tip_split(
+    card: nil,
+    customer_id: nil,
+    captured: nil,
+    platform_merchant: nil,
+    tip_value: 1
+  )
+    base_charge = charge(card: card, customer_id: customer_id, captured: captured)
+    base_charge['splits'] = [
+      {
+        'type' => 'tip',
+        'merchant' => platform_merchant,
+        'amount' => tip_value
+      }.compact
+    ]
+    base_charge
+  end
+
   def self.credit(
     card: nil,
     customer_id: nil

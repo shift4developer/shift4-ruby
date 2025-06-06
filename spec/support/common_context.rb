@@ -9,11 +9,20 @@ RSpec.shared_context 'with standard config' do
   end
 end
 
-RSpec.shared_context 'with explicit merchant config' do
+RSpec.shared_context 'with platform member config' do
   before do
     Shift4::Configuration.api_url = ENV.fetch('API_URL', nil)
     Shift4::Configuration.uploads_url = ENV.fetch('UPLOADS_URL', nil)
     Shift4::Configuration.secret_key = ENV.fetch('EXPLICIT_MERCHANT_SECRET_KEY')
+    Shift4::Configuration.merchant = nil
+  end
+end
+
+RSpec.shared_context 'with platform merchant acting as explicit merchant config' do
+  before do
+    Shift4::Configuration.api_url = ENV.fetch('API_URL', nil)
+    Shift4::Configuration.uploads_url = ENV.fetch('UPLOADS_URL', nil)
+    Shift4::Configuration.secret_key = ENV.fetch('SECRET_KEY')
     Shift4::Configuration.merchant = ENV.fetch('EXPLICIT_MERCHANT')
   end
 end
@@ -30,6 +39,7 @@ end
 def standard_contexts
   [
     'with standard config',
-    'with explicit merchant config'
+    'with platform member config',
+    'with platform merchant acting as explicit merchant config'
   ]
 end
