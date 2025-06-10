@@ -19,7 +19,7 @@ describe Shift4::Charges do
       retrieved = Shift4::Charges.retrieve(created['id'], configuration)
 
       # then
-      expect(retrieved['amount']).to eq(charge_req["amount"])
+      expect(retrieved['amount']).to eq(charge_req['amount'])
     end
   end
 
@@ -33,10 +33,10 @@ describe Shift4::Charges do
       retrieved = Shift4::Charges.retrieve(created['id'])
 
       # then
-      expect(retrieved['amount']).to eq(charge_req["amount"])
-      expect(retrieved['currency']).to eq(charge_req["currency"])
-      expect(retrieved['description']).to eq(charge_req["description"])
-      expect(retrieved['card']['first4']).to eq(charge_req["card"]["first4"])
+      expect(retrieved['amount']).to eq(charge_req['amount'])
+      expect(retrieved['currency']).to eq(charge_req['currency'])
+      expect(retrieved['description']).to eq(charge_req['description'])
+      expect(retrieved['card']['first4']).to eq(charge_req['card']['first4'])
     end
 
     it 'create charge only once with idempotency_key' do
@@ -50,7 +50,7 @@ describe Shift4::Charges do
 
       # then
       expect(created['id']).to eq(not_created_because_idempotency['id'])
-      expect(not_created_because_idempotency.headers['Idempotent-Replayed']).to eq("true")
+      expect(not_created_because_idempotency.headers['Idempotent-Replayed']).to eq('true')
     end
 
     it 'update charge' do
@@ -61,19 +61,19 @@ describe Shift4::Charges do
 
       # when
       updated = Shift4::Charges.update(created['id'],
-                                       "description" => "updated description",
-                                       "metadata" => { "key" => "updated value" })
+                                       'description' => 'updated description',
+                                       'metadata' => { 'key' => 'updated value' })
 
       # then
-      expect(created['description']).to eq(charge_req["description"])
+      expect(created['description']).to eq(charge_req['description'])
       expect(updated['description']).to eq('updated description')
 
-      expect(created['metadata']['key']).to eq(charge_req["metadata"]["key"])
+      expect(created['metadata']['key']).to eq(charge_req['metadata']['key'])
       expect(updated['metadata']['key']).to eq('updated value')
 
-      expect(updated['amount']).to eq(charge_req["amount"])
-      expect(updated['currency']).to eq(charge_req["currency"])
-      expect(updated['card']['first4']).to eq(charge_req["card"]["first4"])
+      expect(updated['amount']).to eq(charge_req['amount'])
+      expect(updated['currency']).to eq(charge_req['currency'])
+      expect(updated['card']['first4']).to eq(charge_req['card']['first4'])
     end
 
     it 'update charge only once with idempotency_key' do
@@ -87,20 +87,20 @@ describe Shift4::Charges do
       # when
       Shift4::Charges.update(created['id'],
                              {
-                               "description" => "updated description",
-                               "metadata" => { "key" => "updated value" }
+                               'description' => 'updated description',
+                               'metadata' => { 'key' => 'updated value' }
                              },
                              request_options)
 
       not_updated_because_idempotency = Shift4::Charges.update(created['id'],
                                                                {
-                                                                 "description" => "updated description",
-                                                                 "metadata" => { "key" => "updated value" }
+                                                                 'description' => 'updated description',
+                                                                 'metadata' => { 'key' => 'updated value' }
                                                                },
                                                                request_options)
 
       # then
-      expect(not_updated_because_idempotency.headers['Idempotent-Replayed']).to eq("true")
+      expect(not_updated_because_idempotency.headers['Idempotent-Replayed']).to eq('true')
     end
 
     it 'capture charge' do
@@ -129,7 +129,7 @@ describe Shift4::Charges do
 
       # then
       expect(captured['id']).to eq(not_captured_because_idempotency['id'])
-      expect(not_captured_because_idempotency.headers['Idempotent-Replayed']).to eq("true")
+      expect(not_captured_because_idempotency.headers['Idempotent-Replayed']).to eq('true')
     end
 
     it 'refund charge' do
@@ -158,7 +158,7 @@ describe Shift4::Charges do
 
       # then
       expect(refunded['id']).to eq(not_refunded_because_idempotency['id'])
-      expect(not_refunded_because_idempotency.headers['Idempotent-Replayed']).to eq("true")
+      expect(not_refunded_because_idempotency.headers['Idempotent-Replayed']).to eq('true')
     end
 
     it 'list charges' do
