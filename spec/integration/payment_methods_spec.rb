@@ -47,7 +47,7 @@ describe Shift4::PaymentMethods do
 
       # then
       expect(retrieved['id']).to eq(created['id'])
-      expect(retrieved['deleted']).to eq(true)
+      expect(retrieved['deleted']).to be(true)
     end
 
     it 'list payment_methods' do

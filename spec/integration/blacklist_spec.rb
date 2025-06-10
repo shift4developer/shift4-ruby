@@ -52,7 +52,7 @@ describe Shift4::Blacklist do
       # then
       expect(deleted['ruleType']).to eq('email')
       expect(deleted['email']).to eq(email)
-      expect(deleted['deleted']).to eq(true)
+      expect(deleted['deleted']).to be(true)
     end
 
     it 'list blacklist' do
