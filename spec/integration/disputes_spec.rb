@@ -68,7 +68,7 @@ describe Shift4::Disputes do
       retrieved = Shift4::Disputes.retrieve(dispute['id'])
 
       # then
-      expect(retrieved['acceptedAsLost']).to eq(true)
+      expect(retrieved['acceptedAsLost']).to be(true)
     end
 
     it 'close dispute only once with idempotency_key' do

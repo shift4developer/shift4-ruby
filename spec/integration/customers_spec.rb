@@ -77,7 +77,7 @@ describe Shift4::Customers do
 
       # then
       expect(updated['id']).not_to be_nil
-      expect(updated['deleted']).to eq(true)
+      expect(updated['deleted']).to be(true)
     end
 
     it 'list customers' do

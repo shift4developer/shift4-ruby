@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class TestData
+class TestData # rubocop:disable Metrics/ClassLength
   def self.card
     {
       'number' => '4242424242424242',
@@ -110,7 +110,10 @@ class TestData
       'type' => 'alipay',
       'customerId' => customer_id,
       'billing' => {
-        'name' => 'Nikola Tesla'
+        'name' => 'Nikola Tesla',
+        'address' => {
+          'country' => 'CN'
+        }
       }.compact
     }.compact
   end

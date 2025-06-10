@@ -81,7 +81,7 @@ describe Shift4::Plans do
 
       # then
       expect(retrieved['id']).to eq(created['id'])
-      expect(retrieved['deleted']).to eq(true)
+      expect(retrieved['deleted']).to be(true)
     end
 
     it 'list plans' do

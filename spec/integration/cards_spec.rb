@@ -140,7 +140,7 @@ describe Shift4::Cards do
       deleted = Shift4::Cards.retrieve(customer['id'], card['id'])
 
       # then
-      expect(deleted['deleted']).to eq(true)
+      expect(deleted['deleted']).to be(true)
     end
 
     it 'list cards' do

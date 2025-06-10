@@ -5,6 +5,7 @@ jobs:
 
   integration-tests:
     env:
+      MERCHANT: ${{ secrets.MERCHANT }}
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
       EXPLICIT_MERCHANT_SECRET_KEY: ${{ secrets.EXPLICIT_MERCHANT_SECRET_KEY }}
       EXPLICIT_MERCHANT: ${{ secrets.EXPLICIT_MERCHANT }}
@@ -13,7 +14,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ ubuntu-latest ]
-        ruby: [ 2.6, 2.7, 3.0 ]
+        ruby: [ 2.6, 2.7, 3.0.3 ]
         include:
           - os: macos-latest
             ruby: 2.6

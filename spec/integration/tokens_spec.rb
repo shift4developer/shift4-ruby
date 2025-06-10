@@ -19,7 +19,7 @@ describe Shift4::Tokens do
       expect(retrieved['expYear']).to eq("20#{token_req['expYear']}")
       expect(retrieved['cardholderName']).to eq(token_req['cardholderName'])
       expect(retrieved['customerId']).to eq(token_req['customerId'])
-      expect(retrieved['used']).to eq(false)
+      expect(retrieved['used']).to be(false)
     end
   end
 end

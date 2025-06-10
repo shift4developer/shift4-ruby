@@ -112,8 +112,8 @@ describe Shift4::Charges do
       captured = Shift4::Charges.capture(created['id'])
 
       # then
-      expect(created['captured']).to eq(false)
-      expect(captured['captured']).to eq(true)
+      expect(created['captured']).to be(false)
+      expect(captured['captured']).to be(true)
     end
 
     it 'capture charge only once with idempotency_key' do
@@ -141,8 +141,8 @@ describe Shift4::Charges do
       refunded = Shift4::Charges.refund(created['id'])
 
       # then
-      expect(created['refunded']).to eq(false)
-      expect(refunded['refunded']).to eq(true)
+      expect(created['refunded']).to be(false)
+      expect(refunded['refunded']).to be(true)
     end
 
     it 'refund charge only once with idempotency_key' do
